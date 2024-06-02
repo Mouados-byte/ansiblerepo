@@ -1,0 +1,9 @@
+- hosts: webservers
+  tasks:
+    - name: Deploy webserver
+      action: webserver
+
+- hosts: databases
+  tasks:
+    - name: Deploy database
+      action: database

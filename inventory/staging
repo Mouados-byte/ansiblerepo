@@ -1,0 +1,5 @@
+[webservers]
+staging-webserver ansible_host=192.168.2.10
+
+[databases]
+staging-database ansible_host=192.168.2.11

@@ -1,0 +1,7 @@
+- hosts: all
+  tasks:
+    - name: Remove webserver
+      command: rm -rf /var/www/html
+
+    - name: Remove database
+      command: rm -rf /var/lib/mysql
