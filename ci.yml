@@ -29,16 +29,22 @@ jobs:
       id: env
       run: |
         if [[ ${{ github.ref }} == 'refs/heads/main' ]]; then
-          echo "::set-output name=environment::production"
+          echo "environment=production" >> $GITHUB_OUTPUT
         elif [[ ${{ github.ref }} == 'refs/heads/staging' ]]; then
-          echo "::set-output name=environment::staging"
+          echo "environment=staging" >> $GITHUB_OUTPUT
         else
-          echo "::set-output name=environment::development"
+          echo "environment=development" >> $GITHUB_OUTPUT
         fi
+
+    - name: Set up SSH key
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.ANSIBLE_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
 
     - name: Run Ansible Playbook
       run: |
-        ansible-playbook playbooks/deploy.yml -i inventory/${{ steps.env.outputs.environment }} --key-file ~/.ssh/id_rsa
+        ansible-playbook playbooks/deploy.yml -i inventory/${{ steps.env.outputs.environment }}
       env:
         ANSIBLE_HOST_KEY_CHECKING: 'false'
         ANSIBLE_PRIVATE_KEY: ${{ secrets.ANSIBLE_PRIVATE_KEY }}
